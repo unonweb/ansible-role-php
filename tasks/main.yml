@@ -10,3 +10,29 @@
       name: "{{ php_install_packages }}"
       state: present
       use: auto
+
+  # config fpm
+  - name: Copy config overrides to {{ __php_fpm_config_dst }}
+    become: true
+    notify: Reload php-fpm
+    loop: "{{ php_fpm_config_overrides }}"
+    ansible.builtin.copy:
+      src: "{{ item }}"
+      dest: "{{ __php_fpm_config_dst }}/{{ item }}"
+      force: true
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
+
+  # config cli
+  - name: Copy config overrides to {{ __php_cli_config_dst }}
+    become: true
+    notify: Reload php-fpm
+    loop: "{{ php_cli_config_overrides }}"
+    ansible.builtin.copy:
+      src: "{{ item }}"
+      dest: "{{ __php_cli_config_dst }}/{{ item }}"
+      force: true
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r

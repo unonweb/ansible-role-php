@@ -1,0 +1,3 @@
+---
+__php_fpm_config_dst: "/etc/php/{{ php_version }}/fpm/conf.d"
+__php_cli_config_dst: "/etc/php/{{ php_version }}/cli/conf.d/"

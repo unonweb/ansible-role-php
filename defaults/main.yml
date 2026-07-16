@@ -10,5 +10,11 @@ php_install_packages:
 
 # CONFIG
 # ======
-php_config_overrides: []
+php_fpm_config_overrides: []
 # -> /etc/php/{{ php_version }}/fpm/conf.d
+php_cli_config_overrides: []
+# -> /etc/php/{{ php_version }}/cli/conf.d/
+
+# HANDLERS
+# ========
+php_handlers_restart: false
