@@ -1,0 +1,14 @@
+---
+# VERSION
+# =======
+php_version: 8.4
+
+# APT
+# ===
+php_install_packages:
+- php
+
+# CONFIG
+# ======
+php_config_overrides: []
+# -> /etc/php/{{ php_version }}/fpm/conf.d

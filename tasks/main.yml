@@ -1,0 +1,12 @@
+---
+- name: php role
+  tags:
+    - php
+  block:
+
+  # install
+  - name: Install packages {{ php_install_packages }}
+    ansible.builtin.package:
+      name: "{{ php_install_packages }}"
+      state: present
+      use: auto
