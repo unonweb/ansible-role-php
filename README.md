@@ -27,6 +27,8 @@ EXAMPLES
 Nextcloud
 ---------
 
+- https://docs.nextcloud.com/server/latest/admin_manual/installation/php_configuration.html
+
 ### install
 
 ```yml
