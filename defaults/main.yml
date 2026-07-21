@@ -23,3 +23,14 @@ php_cli_config_ini_overrides: []
 # HANDLERS
 # ========
 php_handlers_restart: false
+
+# SYSTEMD
+# =======
+php_systemd_copy: []
+php_systemd_template: []
+php_systemd_reset: []
+php_systemd_overrides: []
+php_systemd_start: []
+php_systemd_stop: []
+php_systemd_enable: []
+php_systemd_disable: []

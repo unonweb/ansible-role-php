@@ -1,0 +1,102 @@
+# copy
+- when: php_systemd_copy | length > 0
+  name: Copy systemd unit files {{ php_systemd_copy }}
+  become: true
+  notify: systemctl --system daemon-reload
+  loop: "{{ php_systemd_copy }}"
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "/etc/systemd/system/{{ item.split('/')[-1] }}" # systemd/un.machines.service -> un.machines.service
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+  # template
+- when: php_systemd_template | length > 0
+  name: Template systemd system unit files {{ php_systemd_template }}
+  become: true
+  notify: systemctl --system daemon-reload
+  loop: "{{ php_systemd_template }}"
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/{{ item }}"
+    dest: "/etc/systemd/system/{{ item.split('/')[-1].replace('.j2', '') }}" # systemd/un.machines.service.j2 -> un.machines.service.j2 -> systemd/un.machines.service
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+# reset
+- when: php_systemd_reset | length > 0
+  name: Reset systemd system unit overrides {{ php_systemd_reset }}
+  loop: "{{ php_systemd_reset }}"
+  become: true
+  ansible.builtin.file:
+    path: "/etc/systemd/system/{{ item }}.d"
+    state: absent
+
+# overrides
+- when: php_systemd_overrides | length > 0
+  block:
+
+  # mkdir overrides
+  - name: Mkdir in /etc/systemd/system/...
+    become: true
+    loop: "{{ php_systemd_overrides }}"
+    ansible.builtin.file:
+      path: "/etc/systemd/system/{{ item | dirname }}"
+      state: directory
+      owner: root
+      group: root
+      mode: u=rwx,g=rx,o=rx
+
+  # cp overrides
+  - name: Copy systemd system unit overrides {{ php_systemd_overrides }}
+    become: true
+    notify: systemctl --system daemon-reload
+    loop: "{{ php_systemd_overrides }}"
+    ansible.builtin.copy:
+      src: "{{ role_path }}/files/{{ item }}"
+      dest: "/etc/systemd/system/{{ item }}"
+      force: true
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
+
+# enable
+- when: php_systemd_enable | length > 0
+  name: systemctl --system enable {{ php_systemd_enable }}
+  become: true
+  loop: "{{ php_systemd_enable }}"
+  ansible.builtin.systemd_service:
+    scope: system
+    name: "{{ item }}"
+    enabled: true
+
+# disable
+- when: php_systemd_disable | length > 0
+  name: systemctl --system disable {{ php_systemd_disable }}
+  become: true
+  loop: "{{ php_systemd_disable }}"
+  ansible.builtin.systemd_service:
+    scope: system
+    name: "{{ item }}"
+    enabled: false
+
+# start
+- when: php_systemd_start | length > 0
+  name: systemctl --system start {{ php_systemd_start }}
+  become: true
+  loop: "{{ php_systemd_start }}"
+  ansible.builtin.systemd_service:
+    scope: system
+    name: "{{ item }}"
+    state: started
+
+# stop
+- when: php_systemd_stop | length > 0
+  name: systemctl --system stop {{ php_systemd_stop }}
+  become: true
+  loop: "{{ php_systemd_stop }}"
+  ansible.builtin.systemd_service:
+    scope: system
+    name: "{{ item }}"
+    state: stopped
