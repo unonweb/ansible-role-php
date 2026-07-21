@@ -11,27 +11,40 @@
       state: present
       use: auto
 
-  # config fpm
-  - name: Copy config overrides to {{ __php_fpm_config_dst }}
+  # config fpm ini
+  - name: Copy ini overrides to {{ __php_fpm_config_ini_dst }}
     become: true
     notify: Reload php-fpm
-    loop: "{{ php_fpm_config_overrides }}"
+    loop: "{{ php_fpm_config_ini_overrides }}"
     ansible.builtin.copy:
-      src: "{{ item }}"
-      dest: "{{ __php_fpm_config_dst }}/{{ item }}"
+      src: "{{ role_path }}/files/ini/{{ item }}"
+      dest: "{{ __php_fpm_config_ini_dst }}/{{ item | basename }}"
+      force: true
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
+
+  # config fpm pool
+  - name: Copy fpm-pool overrides to {{ __php_fpm_pool_config_dst }}
+    become: true
+    notify: Reload php-fpm
+    loop: "{{ php_fpm_config_pool_overrides }}"
+    ansible.builtin.copy:
+      src: "{{ role_path }}/files/fpm-pool/{{ item }}"
+      dest: "{{ __php_fpm_pool_config_dst }}/{{ item | basename }}"
       force: true
       owner: root
       group: root
       mode: u=rw,g=r,o=r
 
   # config cli
-  - name: Copy config overrides to {{ __php_cli_config_dst }}
+  - name: Copy ini overrides to {{ __php_cli_config_ini_dst }}
     become: true
     notify: Reload php-fpm
-    loop: "{{ php_cli_config_overrides }}"
+    loop: "{{ php_cli_config_ini_overrides }}"
     ansible.builtin.copy:
-      src: "{{ item }}"
-      dest: "{{ __php_cli_config_dst }}/{{ item }}"
+      src: "{{ role_path }}/files/ini/{{ item }}"
+      dest: "{{ __php_cli_config_ini_dst }}/{{ item | basename }}"
       force: true
       owner: root
       group: root

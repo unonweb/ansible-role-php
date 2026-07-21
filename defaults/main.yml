@@ -10,9 +10,14 @@ php_install_packages:
 
 # CONFIG
 # ======
-php_fpm_config_overrides: []
+php_fpm_config_ini_overrides: []
+# relative to files/ini
 # -> /etc/php/{{ php_version }}/fpm/conf.d
-php_cli_config_overrides: []
+php_fpm_config_pool_overrides: []
+# relative to files/fpm-pool
+# -> /etc/php/{{ php_version }}/fpm/pool.d
+php_cli_config_ini_overrides: []
+# relative to files/ini
 # -> /etc/php/{{ php_version }}/cli/conf.d/
 
 # HANDLERS

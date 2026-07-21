@@ -1,3 +1,4 @@
 ---
-__php_fpm_config_dst: "/etc/php/{{ php_version }}/fpm/conf.d"
-__php_cli_config_dst: "/etc/php/{{ php_version }}/cli/conf.d/"
+__php_fpm_config_ini_dst: "/etc/php/{{ php_version }}/fpm/conf.d"
+__php_fpm_pool_config_dst: "/etc/php/{{ php_version }}/fpm/pool.d"
+__php_cli_config_ini_dst: "/etc/php/{{ php_version }}/cli/conf.d"
