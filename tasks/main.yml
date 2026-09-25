@@ -1,19 +1,13 @@
 ---
 - name: php role
-  tags:
-    - php
+  tags: [role-php]
   block:
 
   # install
-  - name: Install packages {{ php_install_packages }}
-    notify: Reload php-fpm
-    ansible.builtin.package:
-      name: "{{ php_install_packages }}"
-      state: present
-      use: auto
+  - ansible.builtin.import_tasks: php-install.yml
 
   # config
-  - ansible.builtin.import_tasks: config.yml
+  - ansible.builtin.import_tasks: php-config.yml
 
   # systemd
-  - ansible.builtin.import_tasks: systemd.yml
+  - ansible.builtin.import_tasks: php-systemd.yml
